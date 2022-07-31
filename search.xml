@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>使用Burpsuite抓取手机流量</title>
+      <link href="/2022/07/31/%E4%BD%BF%E7%94%A8Burpsuite%E6%8A%93%E5%8F%96%E6%89%8B%E6%9C%BA%E6%B5%81%E9%87%8F/"/>
+      <url>/2022/07/31/%E4%BD%BF%E7%94%A8Burpsuite%E6%8A%93%E5%8F%96%E6%89%8B%E6%9C%BA%E6%B5%81%E9%87%8F/</url>
+      
+        <content type="html"><![CDATA[<h4 id="使用burpsuite抓取手机流量"><a href="#使用burpsuite抓取手机流量" class="headerlink" title="使用burpsuite抓取手机流量"></a>使用burpsuite抓取手机流量</h4><ol><li><p><strong>查看电脑ip，并在burpsuite中将代理设置成本机ip</strong></p><p><img src="https://jzealoimg.oss-cn-hangzhou.aliyuncs.com/Blog/img202207311428718.png" alt="img"></p><p><img src="https://jzealoimg.oss-cn-hangzhou.aliyuncs.com/Blog/img202207311428713.png" alt="img"></p></li><li><p><strong>从burpsuite中导出证书，等会导入到手机中安装</strong></p><p><img src="https://jzealoimg.oss-cn-hangzhou.aliyuncs.com/Blog/img202207311430250.png" alt="img"></p><p><img src="https://jzealoimg.oss-cn-hangzhou.aliyuncs.com/Blog/img202207311430288.png" alt="img"></p><p><img src="https://jzealoimg.oss-cn-hangzhou.aliyuncs.com/Blog/img202207311430722.png" alt="img"></p></li><li><p><strong>手机端设置代理（不同手机设置路径不同，下面以华为手机为例）</strong></p><p>长按连接的wifi，点击修改网络，将代理设置为手动，修改服务器主机名和端口号为burpsuite中设置的代理ip和端口号，保存即可</p><p><img src="https://jzealoimg.oss-cn-hangzhou.aliyuncs.com/Blog/img202207311436731.png" alt="image-20220731143632586"></p></li><li><p><strong>手机端导入ca证书（以华为手机为例）</strong></p><p>简单的方法就是将电脑端证书传到手机中，微信qq均可，然后点击保存，使用证书安装器打开，验证身份（指纹密码等），输入证书名称和凭据用途，保存即可（此方式最快，还有比较常规的方法，自行百度）</p><p><img src="https://jzealoimg.oss-cn-hangzhou.aliyuncs.com/Blog/img202207311440554.png" alt="image-20220731144032426"></p></li><li><p><strong>最最最重要的一步！！！windows关闭防火墙，否则可能无法抓到包！！！</strong></p><p><img src="https://jzealoimg.oss-cn-hangzhou.aliyuncs.com/Blog/img202207311442805.png" alt="image-20220731144241759"></p></li><li><p><strong>之后便可愉快的抓包了</strong></p><p><img src="https://jzealoimg.oss-cn-hangzhou.aliyuncs.com/Blog/img202207311448119.png" alt="image-20220731144806992"></p><p><img src="https://jzealoimg.oss-cn-hangzhou.aliyuncs.com/Blog/img202207311448514.png" alt="image-20220731144831478"></p></li></ol>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> -网络 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>攻击操作汇总</title>
       <link href="/2022/07/23/%E6%94%BB%E5%87%BB%E6%93%8D%E4%BD%9C%E6%B1%87%E6%80%BB/"/>
       <url>/2022/07/23/%E6%94%BB%E5%87%BB%E6%93%8D%E4%BD%9C%E6%B1%87%E6%80%BB/</url>
