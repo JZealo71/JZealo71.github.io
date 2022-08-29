@@ -1,0 +1,8 @@
+@font-face{
+    font-family: 'Source Serif Pro', serif, 'Roboto', sans-serif;
+    font-display: swap;
+    src: url('../font/SourceSerifPro-Regular.ttf') format("truetype");
+}
+body {
+    font-family: 'Source Serif Pro', serif, 'Roboto', sans-serif;
+}
