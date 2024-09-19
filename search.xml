@@ -94,6 +94,29 @@
     
     
     <entry>
+      <title>CentOS7最小系统安装chkrootkit常见问题</title>
+      <link href="/2024/02/15/CentOS7%E6%9C%80%E5%B0%8F%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85chkrootkit%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/"/>
+      <url>/2024/02/15/CentOS7%E6%9C%80%E5%B0%8F%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85chkrootkit%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/</url>
+      
+        <content type="html"><![CDATA[<h3 id="CentOS7最小系统安装chkrootkit常见问题"><a href="#CentOS7最小系统安装chkrootkit常见问题" class="headerlink" title="CentOS7最小系统安装chkrootkit常见问题"></a>CentOS7最小系统安装chkrootkit常见问题</h3><h5 id="问题一：CentOS7最小安装没有安装ifconfig、vim、wget等常用指令，没有开启网卡，需要先开启网卡，然后安装必要的文件"><a href="#问题一：CentOS7最小安装没有安装ifconfig、vim、wget等常用指令，没有开启网卡，需要先开启网卡，然后安装必要的文件" class="headerlink" title="问题一：CentOS7最小安装没有安装ifconfig、vim、wget等常用指令，没有开启网卡，需要先开启网卡，然后安装必要的文件"></a>问题一：CentOS7最小安装没有安装ifconfig、vim、wget等常用指令，没有开启网卡，需要先开启网卡，然后安装必要的文件</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">1. vi /etc/sysconfig/network-scripts/ifcfg-ens33<span class="comment"># vim指令没有安装，暂时不能使用</span></span><br><span class="line">2. 将onboot no 改成 onboot <span class="built_in">yes</span>，保存退出</span><br><span class="line">3. 重启网络：systemctl restart network</span><br></pre></td></tr></table></figure><ol><li><p>准备gcc编译环境</p><p>对于CentOS系统，需要安装gcc编译环境，执行下述三个命令：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@server ~]<span class="comment"># yum -y install gcc</span></span><br><span class="line">[root@server ~]<span class="comment"># yum -y install gcc-c++//不能输入g++，提示没有可用的包</span></span><br><span class="line">[root@server ~]<span class="comment"># yum -y install make</span></span><br></pre></td></tr></table></figure></li><li><p>安装chkrootkit</p><p>为了安全起见，<strong>建议直接从官方网站下载chkrootkit源码</strong>，然后进行安装，操作如下：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@server ~]<span class="comment"># tar zxvf chkrootkit.tar.gz</span></span><br><span class="line">[root@server ~]<span class="comment"># cd chkrootkit-*</span></span><br><span class="line">[root@server ~]<span class="comment"># make sense</span></span><br><span class="line"><span class="comment"># 注意，上面的编译命令为make sense</span></span><br><span class="line">[root@server ~]<span class="comment"># cd ..</span></span><br><span class="line">[root@server ~]<span class="comment"># cp -r chkrootkit-* /usr/local/chkrootkit</span></span><br><span class="line">[root@server ~]<span class="comment"># rm -rf chkrootkit-*</span></span><br></pre></td></tr></table></figure></li></ol><h5 id="问题二：使用编译指令make-sense时，报错"><a href="#问题二：使用编译指令make-sense时，报错" class="headerlink" title="问题二：使用编译指令make sense时，报错"></a>问题二：使用编译指令make sense时，报错</h5><p><img src="https://jzealoimg.oss-cn-hangzhou.aliyuncs.com/Blog/img/Sep/202402151256087.png" alt="image-20240215125634961"></p><p><strong>原因：在新版本的linux 系统下安装 glibc-devel、glibc和gcc-c++时，都不会安装libc.a. <a href="http://只安装libc.so/">只安装libc.so</a>. 所以当使用-static时，libc.a不能使用，只能报找不到libc了</strong></p><p><strong>解决：安装glibc-static</strong></p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum -y install glibc-static</span><br></pre></td></tr></table></figure><ol start="3"><li><p>使用chkrootkit</p><p>安装完的chkrootkit程序位于&#x2F;usr&#x2F;local&#x2F;chkrootkit目录下，执行如下命令即可显示chkrootkit的详细用法：</p><p><img src="https://jzealoimg.oss-cn-hangzhou.aliyuncs.com/Blog/img/Sep/202402151314925.png" alt="image-20240215131433872"></p><p>chkrootkit的使用比较简单，直接执行chkrootkit命令即可自动开始检测系统。下面是某个系统的检测结果：</p><p><img src="https://jzealoimg.oss-cn-hangzhou.aliyuncs.com/Blog/img/Sep/202402151317628.png" alt="image-20240215131736586"></p><p>检测结果较多，可以使用more进行分页显示：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/usr/local/chkrootkit/chkrootkit | more</span><br></pre></td></tr></table></figure></li><li><p>chkrootkit的缺点</p><p>chkrootkit在检查rootkit的过程中使用了部分系统命令，因此，如果服务器被黑客入侵，那么依赖的系统命令可能也已经被入侵者替换，此时chkrootkit的检测结果将变得完全不可信。为了避免chkrootkit的这个问题，可以在服务器对外开放前，事先将chkrootkit使用的系统命令进行备份，<strong>在需要的时候使用备份的原始系统命令让chkrootkit对rootkit进行检测</strong>。这个过程可以通过下面的操作实现：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@server ~]<span class="comment"># mkdir /usr/share/.commands</span></span><br><span class="line">[root@server ~]<span class="comment"># cp `which --skip-alias awk cut echo find egrep id head ls netstat ps</span></span><br><span class="line">strings sed <span class="built_in">uname</span>` /usr/share/.commands</span><br><span class="line">[root@server ~]<span class="comment"># /usr/local/chkrootkit/chkrootkit -p /usr/share/.commands///指定命令的路径</span></span><br><span class="line">[root@server share]<span class="comment"># cd /usr/share/</span></span><br><span class="line">[root@server share]<span class="comment"># tar zcvf commands.tar.gz .commands</span></span><br><span class="line">[root@server share]<span class="comment"># rm -rf commands.tar.gz</span></span><br></pre></td></tr></table></figure><p>上面这段操作是在&#x2F;usr&#x2F;share&#x2F;下建立了一个.commands隐藏文件，然后将chkrootkit使用的系统命令进行备份到这个目录下。为了安全起见，可以将.commands目录压缩打包，然后下载到一个安全的地方进行备份，以后如果服务器遭受入侵，就可以将这个备份上传到服务器任意路径下，然后通过chkrootkit命令的“-p”参数指定这个路径进行检测即可</p></li></ol>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Centos </tag>
+            
+            <tag> 安全 </tag>
+            
+            <tag> chkrootkit </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>bWAPP安装与通关</title>
       <link href="/2022/09/24/bWAPP%E5%AE%89%E8%A3%85%E4%B8%8E%E9%80%9A%E5%85%B3/"/>
       <url>/2022/09/24/bWAPP%E5%AE%89%E8%A3%85%E4%B8%8E%E9%80%9A%E5%85%B3/</url>
