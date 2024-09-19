@@ -4,6 +4,50 @@
   
     
     <entry>
+      <title>Typora不能加载图片</title>
+      <link href="/2024/09/19/Typora%E4%B8%8D%E8%83%BD%E5%8A%A0%E8%BD%BD%E5%9B%BE%E7%89%87/"/>
+      <url>/2024/09/19/Typora%E4%B8%8D%E8%83%BD%E5%8A%A0%E8%BD%BD%E5%9B%BE%E7%89%87/</url>
+      
+        <content type="html"><![CDATA[<h2 id="Typora不能加载图片"><a href="#Typora不能加载图片" class="headerlink" title="Typora不能加载图片"></a>Typora不能加载图片</h2><h4 id="一、问题描述："><a href="#一、问题描述：" class="headerlink" title="一、问题描述："></a>一、问题描述：</h4><p>用的<code>Windows10 + typora-0.9.93 + Picgo + 阿里云的OSS</code>，上传图片成功，Picgo和阿里云图床都显示正常，就是typora文档加载不出来图片</p><p><img src="https://jzealoimg.oss-cn-hangzhou.aliyuncs.com/Blog/img/Sep/202409191630597.png" alt="image-20240919161056497"></p><h4 id="二、解决过程："><a href="#二、解决过程：" class="headerlink" title="二、解决过程："></a>二、解决过程：</h4><p>自己把网上的方法都试了，全都没用，无奈求助我的大佬同学，他让我用其他md软件测试一下，给我推荐了一款markdown编辑器<a href="markdownpad.com">软件</a>，我安装的免费版，安装的过程中额外安装了一个VC++2010，新软件安装后没法正常使用，<strong>但是再次打开typora却神奇的发现可以正常加载图片了！！！！</strong></p><h4 id="三、总结："><a href="#三、总结：" class="headerlink" title="三、总结："></a>三、总结：</h4><ol><li><p>最基本的原因是网络是否有问题，图床是否有问题，路径是否有问题，我的显然都不属于这几种</p></li><li><p>网上有的说图片太大不会正常加载，改小就可以了。但是很多评论说不是这个原因，我的也不是这个原因</p></li><li><p>我重装了Typora，也是没用</p></li><li><p>在我安装另一个md软件的过程中，额外安装了一个VC++2010后，再次打开Typora，成功了。虽然我也不清楚是不是这个原因</p><p><img src="https://jzealoimg.oss-cn-hangzhou.aliyuncs.com/Blog/img/Sep/202409191630547.png" alt="image-20240919161017218"></p></li></ol>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Typora </tag>
+            
+            <tag> 软件 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>bWAPP安装与通关</title>
+      <link href="/2022/09/24/bWAPP%E5%AE%89%E8%A3%85%E4%B8%8E%E9%80%9A%E5%85%B3/"/>
+      <url>/2022/09/24/bWAPP%E5%AE%89%E8%A3%85%E4%B8%8E%E9%80%9A%E5%85%B3/</url>
+      
+        <content type="html"><![CDATA[<h3 id="一、安装bWAPP"><a href="#一、安装bWAPP" class="headerlink" title="一、安装bWAPP"></a>一、安装bWAPP</h3><h5 id="1-单独安装"><a href="#1-单独安装" class="headerlink" title="1.单独安装"></a>1.单独安装</h5><p>部署在Apache+PHP+Mysql环境下（以phpstudy为例）</p><ol><li><a href="https://sourceforge.net/projects/bwapp/files/latest/download">bWAPP下载</a></li><li>将文件解压后，放到phpstudy的WWW目录下（有两个bWAPP文件夹，外层的文件可以删掉，只留里面一层）</li><li>在admin&#x2F;settings.php文件中设置用户密码为root（mysql默认的，不改的话第4步安装不成功）</li><li>浏览器运行127.0.0.1&#x2F;bWAPP&#x2F;install.php</li><li>点击here链接安装bWAPP</li></ol><h5 id="2-虚拟机安装"><a href="#2-虚拟机安装" class="headerlink" title="2. 虚拟机安装"></a>2. 虚拟机安装</h5><p>虚拟机版本能够测试的漏洞更多，比如破壳漏洞，心脏滴血等在单独安装的环境下无法测试</p><ol><li><a href="https://sourceforge.net/projects/bwapp/files/bee-box/bee-box_v1.6.7z/download">下载压缩包</a></li><li>解压后使用VMWare打开bee-box.vmx即可</li><li>点击bWAPP Start即可进入登录界面，或者物理机访问：http:&#x2F;&#x2F;虚拟机IP地址&#x2F;bWAPP&#x2F;login.php</li></ol><h5 id="3-Docker安装"><a href="#3-Docker安装" class="headerlink" title="3. Docker安装"></a>3. Docker安装</h5><p>在hub.docker.com上搜索bwapp，使用<a href="https://hub.docker.com/r/raesene/bwapp">raesene&#x2F;bwapp</a>镜像即可</p><p>拉取镜像后，根据网站说明操作即可：运行docker指令：<code>docker run -d -p 80:80 raesene/bwapp</code></p><h5 id="所需有关bWAPP文件均可从itsecgames-com得到"><a href="#所需有关bWAPP文件均可从itsecgames-com得到" class="headerlink" title="所需有关bWAPP文件均可从itsecgames.com得到"></a>所需有关bWAPP文件均可从<a href="http://itsecgames.com/">itsecgames.com</a>得到</h5>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 靶场 </tag>
+            
+            <tag> bWAPP </tag>
+            
+            <tag> 软件安装 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Django基本操作（5）</title>
       <link href="/2022/09/11/Django%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C%EF%BC%885%EF%BC%89/"/>
       <url>/2022/09/11/Django%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C%EF%BC%885%EF%BC%89/</url>
